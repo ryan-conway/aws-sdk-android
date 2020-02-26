@@ -112,6 +112,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -259,6 +261,8 @@ public final class AWSMobileClient implements AWSCredentialsProvider {
     Auth hostedUI;
     OAuth2Client mOAuth2Client;
     String mUserPoolPoolId;
+
+    private Proxy proxy = null;
 
     enum SignInMode {
         SIGN_IN("0"),
@@ -437,14 +441,20 @@ public final class AWSMobileClient implements AWSCredentialsProvider {
     @AnyThread
     public void initialize(final Context context, final AWSConfiguration awsConfig, final Callback<UserStateDetails> callback) {
         final InternalCallback internalCallback = new InternalCallback<UserStateDetails>(callback);
-        internalCallback.async(_initialize(context, awsConfig, internalCallback));
+        initialize(context, awsConfig, null, callback);
+    }
+
+    @AnyThread
+    public void initialize(final Context context, final AWSConfiguration awsConfig, Proxy proxy, final Callback<UserStateDetails> callback) {
+        final InternalCallback internalCallback = new InternalCallback<UserStateDetails>(callback);
+        internalCallback.async(_initialize(context, awsConfig, proxy, internalCallback));
     }
 
     CountDownLatch getSignInUILatch() {
         return showSignInWaitLatch;
     }
 
-    protected Runnable _initialize(final Context context, final AWSConfiguration awsConfiguration, final Callback<UserStateDetails> callback) {
+    protected Runnable _initialize(final Context context, final AWSConfiguration awsConfiguration, final Proxy proxy, final Callback<UserStateDetails> callback) {
         return new Runnable() {
             public void run() {
                 synchronized (initLockObject) {
@@ -543,6 +553,13 @@ public final class AWSMobileClient implements AWSCredentialsProvider {
 
                             final ClientConfiguration clientConfig = new ClientConfiguration();
                             clientConfig.setUserAgent(USER_AGENT + " " + awsConfiguration.getUserAgent());
+                            if (proxy != null) {
+                                InetSocketAddress socketAddress = (InetSocketAddress) proxy.address();
+                                if (socketAddress != null) {
+                                    clientConfig.setProxyHost(socketAddress.getHostName());
+                                    clientConfig.setProxyPort(socketAddress.getPort());
+                                }
+                            }
                             userpoolLL =
                                     new AmazonCognitoIdentityProviderClient(new AnonymousAWSCredentials(), clientConfig);
                             userpoolLL.setRegion(com.amazonaws.regions.Region.getRegion(Regions.fromName(userPoolJSON.getString("Region"))));
