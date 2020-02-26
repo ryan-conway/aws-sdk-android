@@ -38,6 +38,11 @@ public class ClassifyDocumentResultJsonUnmarshaller implements
                         DocumentClassJsonUnmarshaller.getInstance()
                         )
                                 .unmarshall(context));
+            } else if (name.equals("Labels")) {
+                classifyDocumentResult.setLabels(new ListUnmarshaller<DocumentLabel>(
+                        DocumentLabelJsonUnmarshaller.getInstance()
+                        )
+                                .unmarshall(context));
             } else {
                 reader.skipValue();
             }

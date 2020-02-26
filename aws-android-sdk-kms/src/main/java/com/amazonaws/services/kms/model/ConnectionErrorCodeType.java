@@ -28,7 +28,10 @@ public enum ConnectionErrorCodeType {
     NETWORK_ERRORS("NETWORK_ERRORS"),
     INTERNAL_ERROR("INTERNAL_ERROR"),
     INSUFFICIENT_CLOUDHSM_HSMS("INSUFFICIENT_CLOUDHSM_HSMS"),
-    USER_LOCKED_OUT("USER_LOCKED_OUT");
+    USER_LOCKED_OUT("USER_LOCKED_OUT"),
+    USER_NOT_FOUND("USER_NOT_FOUND"),
+    USER_LOGGED_IN("USER_LOGGED_IN"),
+    SUBNET_NOT_FOUND("SUBNET_NOT_FOUND");
 
     private String value;
 
@@ -50,6 +53,9 @@ public enum ConnectionErrorCodeType {
         enumMap.put("INTERNAL_ERROR", INTERNAL_ERROR);
         enumMap.put("INSUFFICIENT_CLOUDHSM_HSMS", INSUFFICIENT_CLOUDHSM_HSMS);
         enumMap.put("USER_LOCKED_OUT", USER_LOCKED_OUT);
+        enumMap.put("USER_NOT_FOUND", USER_NOT_FOUND);
+        enumMap.put("USER_LOGGED_IN", USER_LOGGED_IN);
+        enumMap.put("SUBNET_NOT_FOUND", SUBNET_NOT_FOUND);
     }
 
     /**

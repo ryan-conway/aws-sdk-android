@@ -21,7 +21,7 @@ import com.amazonaws.AmazonServiceException;
  * <p>
  * The resource you are looking for has not been found. Review the resource
  * you're looking for and see if a different resource will accomplish your needs
- * before retrying the revised request. .
+ * before retrying the revised request.
  * </p>
  */
 public class ResourceNotFoundException extends AmazonServiceException {
